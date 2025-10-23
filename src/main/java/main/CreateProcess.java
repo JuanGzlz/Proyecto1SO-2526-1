@@ -163,4 +163,99 @@ public class CreateProcess extends javax.swing.JFrame {
             return false;
         }
     }
+    
+    /**
+     * Validates the instructions text area for I/O Bound processes
+     */
+    private boolean validateInstructions() {
+        // If CPU Bound, no instructions needed
+        if (typeComboBox.getSelectedIndex() == 1) {
+            instructions = new List<>();
+            return true;
+        }
+        
+        // For I/O Bound, validate instructions
+        String input = instructionsTextArea.getText().trim();
+        
+        if (input.isEmpty()) {
+            JOptionPane.showMessageDialog(this, 
+                "I/O Bound processes must have instructions.\nFormat: position1,duration1,position2,duration2,...", 
+                "Validation Error", 
+                JOptionPane.ERROR_MESSAGE);
+            return false;
+        }
+        
+        instructions = new List<>();
+        StringBuilder numberBuilder = new StringBuilder();
+
+        try {
+            for (int i = 0; i < input.length(); i++) {
+                char currentChar = input.charAt(i);
+
+                if (currentChar == ',') {
+                    if (numberBuilder.length() > 0) {
+                        int number = Integer.parseInt(numberBuilder.toString().trim());
+                        if (number <= 0) {
+                            JOptionPane.showMessageDialog(this, 
+                                "All instruction values must be greater than 0", 
+                                "Validation Error", 
+                                JOptionPane.ERROR_MESSAGE);
+                            return false;
+                        }
+                        instructions.appendLast(number);
+                        numberBuilder.setLength(0);
+                    }
+                } else if (Character.isDigit(currentChar)) {
+                    numberBuilder.append(currentChar);
+                } else if (!Character.isWhitespace(currentChar)) {
+                    JOptionPane.showMessageDialog(this, 
+                        "Invalid character found: '" + currentChar + "'\nOnly numbers and commas are allowed", 
+                        "Validation Error", 
+                        JOptionPane.ERROR_MESSAGE);
+                    return false;
+                }
+            }
+
+            // Add the last number
+            if (numberBuilder.length() > 0) {
+                int number = Integer.parseInt(numberBuilder.toString().trim());
+                if (number <= 0) {
+                    JOptionPane.showMessageDialog(this, 
+                        "All instruction values must be greater than 0", 
+                        "Validation Error", 
+                        JOptionPane.ERROR_MESSAGE);
+                    return false;
+                }
+                instructions.appendLast(number);
+            }
+        } catch (NumberFormatException e) {
+            JOptionPane.showMessageDialog(this, 
+                "Instructions must contain valid integers", 
+                "Validation Error", 
+                JOptionPane.ERROR_MESSAGE);
+            return false;
+        }
+
+        // Verify even number of values (position, duration pairs)
+        if (instructions.getSize() % 2 == 1) {
+            JOptionPane.showMessageDialog(this, 
+                "Instructions must be in pairs (position, duration).\nYou have " + instructions.getSize() + " values.", 
+                "Validation Error", 
+                JOptionPane.ERROR_MESSAGE);
+            return false;
+        }
+        
+        // Check if even-indexed values (positions) are in ascending order
+        for (int i = 2; i < instructions.getSize(); i += 2) {
+            if ((int)instructions.getNodoById(i).getValue() <= (int) instructions.getNodoById(i - 2).getValue()) {
+                JOptionPane.showMessageDialog(this, 
+                    "Instruction positions must be in ascending order", 
+                    "Validation Error", 
+                    JOptionPane.ERROR_MESSAGE);
+                return false;
+            }
+        }
+
+        return true;
+    }
 }
