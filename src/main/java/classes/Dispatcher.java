@@ -501,6 +501,43 @@ public class Dispatcher {
         window.updateExit(display);
     }
 
+    public void updateSuspendedLists(){
+        String display = "";
+        
+        NodoList pAux = suspendedReadyList.getHead();
+        while(pAux != null){
+            ProcessImage process = (ProcessImage) pAux.getValue();
+            display += "\n ----------------------------------\n " +
+                    "ID: " + process.getId() +
+                    "\n Nombre: " + process.getName() +
+                    "\n Type: Ready" +
+                    "\n WT: " + process.getWaitingTime();
+            pAux = pAux.getpNext();
+        }
+        
+        pAux = suspendedBlockedList.getHead();
+        while(pAux != null){
+            ProcessImage process = (ProcessImage) pAux.getValue();
+            display += "\n ----------------------------------\n " +
+                    "ID: " + process.getId() +
+                    "\n Nombre: " + process.getName() +
+                    "\n Type: Blocked";
+            pAux = pAux.getpNext();
+        }
+        
+        window.updateSuspended(display);
+    }
     
-    
+    public static String makeString(ProcessImage currentProcess){
+        String display = "\n ----------------------------------\n ID: " + currentProcess.getId() + 
+                "\n Status: " + currentProcess.getStatus()+ 
+                "\n Nombre: " + currentProcess.getName() +
+                "\n PC: " + currentProcess.getProgramCounter() + 
+                "\n MAR: " + currentProcess.getMemoryAddressRegister() +
+                "\n RT: " + (currentProcess.getDuration() - currentProcess.getMemoryAddressRegister()) +
+                "\n WT: " + currentProcess.getWaitingTime() +
+                "\n Memory: " + (currentProcess.isInMemory() ? "In Memory (" + currentProcess.getMemoryRequired() + " MB)" : "Suspended") +
+                "\n Instructions: " + currentProcess.getInstructions().showAttribute();
+        return display;
+    }
 }
