@@ -258,4 +258,269 @@ public class CreateProcess extends javax.swing.JFrame {
 
         return true;
     }
+    
+    /**
+     * Validates all fields and creates the process
+     */
+    private void createProcess() {
+        // Validate all fields
+        if (!validateId()) return;
+        if (!validateName()) return;
+        if (!validateDuration()) return;
+        if (!validateInstructions()) return;
+        
+        // All validations passed, create the process
+        try {
+            int id = Integer.parseInt(idTextField.getText().trim());
+            String name = nameTextField.getText().trim();
+            String type = (String) typeComboBox.getSelectedItem();
+            int duration = Integer.parseInt(durationTextField.getText().trim());
+            
+            // Create the process through the parent window
+            father.createNewProcess(instructions, name, type, duration, id);
+            
+            JOptionPane.showMessageDialog(this, 
+                "Process created successfully!", 
+                "Success", 
+                JOptionPane.INFORMATION_MESSAGE);
+            
+            this.dispose();
+            
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(this, 
+                "Error creating process: " + e.getMessage(), 
+                "Error", 
+                JOptionPane.ERROR_MESSAGE);
+        }
+    }
+
+    @SuppressWarnings("unchecked")
+    private void initComponents() {
+
+        mainPanel = new javax.swing.JPanel();
+        titleLabel = new javax.swing.JLabel();
+        idLabel = new javax.swing.JLabel();
+        idTextField = new javax.swing.JTextField();
+        nameLabel = new javax.swing.JLabel();
+        nameTextField = new javax.swing.JTextField();
+        typeLabel = new javax.swing.JLabel();
+        typeComboBox = new javax.swing.JComboBox<>();
+        durationLabel = new javax.swing.JLabel();
+        durationTextField = new javax.swing.JTextField();
+        instructionsLabel = new javax.swing.JLabel();
+        instructionsScrollPane = new javax.swing.JScrollPane();
+        instructionsTextArea = new javax.swing.JTextArea();
+        instructionsHintLabel = new javax.swing.JLabel();
+        cancelButton = new javax.swing.JButton();
+        createButton = new javax.swing.JButton();
+
+        setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
+        setTitle("Create New Process");
+
+        mainPanel.setBorder(javax.swing.BorderFactory.createEmptyBorder(20, 20, 20, 20));
+
+        titleLabel.setFont(new java.awt.Font("Dialog", 1, 18));
+        titleLabel.setText("Create New Process");
+
+        idLabel.setText("Process ID:");
+
+        idTextField.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusLost(java.awt.event.FocusEvent evt) {
+                idTextFieldFocusLost(evt);
+            }
+        });
+
+        nameLabel.setText("Process Name:");
+
+        typeLabel.setText("Process Type:");
+
+        typeComboBox.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "I/O Bound", "CPU Bound" }));
+        typeComboBox.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                typeComboBoxActionPerformed(evt);
+            }
+        });
+
+        durationLabel.setText("Duration (cycles):");
+
+        instructionsLabel.setText("I/O Instructions:");
+
+        instructionsTextArea.setColumns(20);
+        instructionsTextArea.setRows(5);
+        instructionsTextArea.setToolTipText("Enter I/O instructions as: position,duration (e.g., 100,200,500,600)");
+        instructionsScrollPane.setViewportView(instructionsTextArea);
+
+        instructionsHintLabel.setFont(new java.awt.Font("Dialog", 2, 11));
+        instructionsHintLabel.setText("Format: position1,duration1,position2,duration2,... (e.g., 100,200,500,600)");
+
+        cancelButton.setText("Cancel");
+        cancelButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                cancelButtonActionPerformed(evt);
+            }
+        });
+
+        createButton.setBackground(new java.awt.Color(0, 204, 153));
+        createButton.setText("Create");
+        createButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                createButtonActionPerformed(evt);
+            }
+        });
+
+        javax.swing.GroupLayout mainPanelLayout = new javax.swing.GroupLayout(mainPanel);
+        mainPanel.setLayout(mainPanelLayout);
+        mainPanelLayout.setHorizontalGroup(
+            mainPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(mainPanelLayout.createSequentialGroup()
+                .addGroup(mainPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(titleLabel)
+                    .addGroup(mainPanelLayout.createSequentialGroup()
+                        .addGroup(mainPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(idLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 150, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(nameLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 150, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(typeLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 150, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(durationLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 150, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(instructionsLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 150, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(18, 18, 18)
+                        .addGroup(mainPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(idTextField)
+                            .addComponent(nameTextField)
+                            .addComponent(typeComboBox, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(durationTextField)
+                            .addComponent(instructionsScrollPane, javax.swing.GroupLayout.DEFAULT_SIZE, 350, Short.MAX_VALUE)))
+                    .addComponent(instructionsHintLabel)
+                    .addGroup(mainPanelLayout.createSequentialGroup()
+                        .addComponent(cancelButton, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(18, 18, 18)
+                        .addComponent(createButton, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addGap(0, 20, Short.MAX_VALUE))
+        );
+        mainPanelLayout.setVerticalGroup(
+            mainPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(mainPanelLayout.createSequentialGroup()
+                .addComponent(titleLabel)
+                .addGap(18, 18, 18)
+                .addGroup(mainPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(idLabel)
+                    .addComponent(idTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(18, 18, 18)
+                .addGroup(mainPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(nameLabel)
+                    .addComponent(nameTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(18, 18, 18)
+                .addGroup(mainPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(typeLabel)
+                    .addComponent(typeComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(18, 18, 18)
+                .addGroup(mainPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(durationLabel)
+                    .addComponent(durationTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(18, 18, 18)
+                .addGroup(mainPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(instructionsLabel)
+                    .addComponent(instructionsScrollPane, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(instructionsHintLabel)
+                .addGap(30, 30, 30)
+                .addGroup(mainPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(cancelButton)
+                    .addComponent(createButton))
+                .addGap(0, 20, Short.MAX_VALUE))
+        );
+
+        javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
+        getContentPane().setLayout(layout);
+        layout.setHorizontalGroup(
+            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(mainPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+        );
+        layout.setVerticalGroup(
+            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(mainPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+        );
+
+        pack();
+        setLocationRelativeTo(null);
+    }
+
+    private void typeComboBoxActionPerformed(java.awt.event.ActionEvent evt) {
+        // Enable/disable instructions based on process type
+        if (typeComboBox.getSelectedIndex() == 1) { // CPU Bound
+            instructionsTextArea.setEnabled(false);
+            instructionsTextArea.setText("");
+            instructionsTextArea.setBackground(new java.awt.Color(240, 240, 240));
+        } else { // I/O Bound
+            instructionsTextArea.setEnabled(true);
+            instructionsTextArea.setBackground(java.awt.Color.WHITE);
+        }
+    }
+
+    private void idTextFieldFocusLost(java.awt.event.FocusEvent evt) {
+        // Optionally validate ID when focus is lost
+        String idText = idTextField.getText().trim();
+        if (!idText.isEmpty()) {
+            try {
+                int id = Integer.parseInt(idText);
+                if (!isIdUnique(id)) {
+                    idTextField.setBackground(new java.awt.Color(255, 200, 200));
+                } else {
+                    idTextField.setBackground(java.awt.Color.WHITE);
+                }
+            } catch (NumberFormatException e) {
+                idTextField.setBackground(new java.awt.Color(255, 200, 200));
+            }
+        }
+    }
+
+    private void cancelButtonActionPerformed(java.awt.event.ActionEvent evt) {
+        this.dispose();
+    }
+
+    private void createButtonActionPerformed(java.awt.event.ActionEvent evt) {
+        createProcess();
+    }
+
+    public static void main(String args[]) {
+        try {
+            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
+                if ("Nimbus".equals(info.getName())) {
+                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
+                    break;
+                }
+            }
+        } catch (ClassNotFoundException ex) {
+            java.util.logging.Logger.getLogger(CreateProcess.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+        } catch (InstantiationException ex) {
+            java.util.logging.Logger.getLogger(CreateProcess.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+        } catch (IllegalAccessException ex) {
+            java.util.logging.Logger.getLogger(CreateProcess.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+        } catch (javax.swing.UnsupportedLookAndFeelException ex) {
+            java.util.logging.Logger.getLogger(CreateProcess.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+        }
+
+        java.awt.EventQueue.invokeLater(new Runnable() {
+            public void run() {
+                new CreateProcess().setVisible(true);
+            }
+        });
+    }
+
+    // Variables declaration
+    private javax.swing.JButton cancelButton;
+    private javax.swing.JButton createButton;
+    private javax.swing.JLabel durationLabel;
+    private javax.swing.JTextField durationTextField;
+    private javax.swing.JLabel idLabel;
+    private javax.swing.JTextField idTextField;
+    private javax.swing.JLabel instructionsHintLabel;
+    private javax.swing.JLabel instructionsLabel;
+    private javax.swing.JScrollPane instructionsScrollPane;
+    private javax.swing.JTextArea instructionsTextArea;
+    private javax.swing.JPanel mainPanel;
+    private javax.swing.JLabel nameLabel;
+    private javax.swing.JTextField nameTextField;
+    private javax.swing.JLabel titleLabel;
+    private javax.swing.JComboBox<String> typeComboBox;
+    private javax.swing.JLabel typeLabel;
 }
