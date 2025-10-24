@@ -44,5 +44,21 @@ public class UtilityGraph extends JFrame {
         setContentPane(panel);
     }
 
-    
+    private DefaultCategoryDataset createDataset() {
+        DefaultCategoryDataset dataset = new DefaultCategoryDataset();
+        
+        dataset.addValue(0, "User", "CPU");
+        dataset.addValue(0, "OS", "CPU");
+        
+        return dataset;
+    }
+
+    public void updateDataset(int instructions, String type) {
+        SwingUtilities.invokeLater(() -> {
+            Number existingValue = dataset.getValue(type, "CPU");
+            int newValue = existingValue.intValue() + instructions;
+            dataset.addValue(newValue, type, "CPU");
+            ((ChartPanel) getContentPane()).repaint();
+        });
+    }
 }
