@@ -1,0 +1,2 @@
+[16:51:28.050] === NEW SIMULATION STARTED ===
+[16:51:28.050] MEMORY: -2493 MB available out of 1000 MB total
