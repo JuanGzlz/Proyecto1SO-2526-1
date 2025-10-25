@@ -3,7 +3,6 @@ ID,Name,Type,Status,ProgramCounter,MemoryAddressRegister,Duration,Quantum,Waitin
 7890,Process_7890,I/O Bound,ready,1,0,1923,0,6,345;170;1234;390
 3267,Process_3267,I/O Bound,ready,1,0,2134,0,6,398;150;1123;380
 5489,Process_5489,I/O Bound,ready,1,0,2789,0,6,456;210;1456;330;2234;180
-1523,Process_1523,I/O Bound,ready,1,0,2847,0,1,245;120;892;340;1654;180
 4567,Process_4567,I/O Bound,ready,1,0,2945,0,6,423;220;1234;360;2345;270
 10,GabrielePrueba,CPU Bound,ready,1,0,3200,0,6,[]
 3456,Process_3456,I/O Bound,ready,1,0,3298,0,6,289;250;1089;370;2145;290
